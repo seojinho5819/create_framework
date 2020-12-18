@@ -1,5 +1,5 @@
-<%@page import="org.apache.ibatis.session.SqlSession"%>
 <%@page import="com.model2.notice.domain.Notice"%>
+<%@page import="org.apache.ibatis.session.SqlSession"%>
 <%@page import="java.util.List"%>
 <%@page import="common.board.Pager"%>
 <%@ page contentType="text/html;charset=utf-8"%>
@@ -48,7 +48,7 @@ tr:nth-child(even) {
 		<%Notice board=(Notice)list.get(curPos++); %>
 		<tr>
 			<td><%=num--%></td>
-			<td><a href="/board/detail?notice_id=<%=board.getNotice_id()%>"><%=board.getTitle() %></a></td>
+			<td><a href="/notice/detail.do?notice_id=<%=board.getNotice_id()%>"><%=board.getTitle() %></a></td>
 			<td><%=board.getWriter() %></td>
 			<td><%=board.getRegdate() %></td>
 			<td><%=board.getHit() %></td>
