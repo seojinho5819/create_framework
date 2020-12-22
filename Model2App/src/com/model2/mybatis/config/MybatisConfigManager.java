@@ -1,11 +1,12 @@
-/*이 클래스의 목적:
+/*이 클래스의 목적: 
  * 쿼리문 수행에 피요한 sql세션을 보다 쉽게 얻어 갈수 있도록 재사용성을 고려하여
  * 정의한 객체 특히 이 객체의 인스턴스는 어플리케이션 내에서 1개만 워야 하므로 SingleTon
  * 패턴의로 정의하자!!
  */
 package com.model2.mybatis.config;
+ 
 
-import java.io.InputStream;
+import java.io.InputStream; 
 
 import org.apache.ibatis.io.Resources;
 import org.apache.ibatis.session.SqlSession;

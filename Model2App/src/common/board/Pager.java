@@ -19,7 +19,7 @@ public class Pager {
 	private int num;//페이지당 시작 번호
 	
 	//선언된 변수에 대한 초기화
-	public void init(HttpServletRequest request, List list) {
+	public void init(HttpServletRequest request,List list) {
 		totalRecord =list.size();
 		totalPage =(int)Math.ceil((float)totalRecord/pageSize);
 		
