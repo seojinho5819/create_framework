@@ -1,16 +1,21 @@
-package com.koreait.fashionmall.controller.admin;
+package com.koreait.fashionmall.controller.product;
 
-import java.io.File;
+import java.io.File; 
 import java.io.IOException;
 import java.util.List;
+
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.context.ServletContextAware;
 import org.springframework.web.servlet.ModelAndView;
 
 
@@ -22,16 +27,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.koreait.fashionmall.common.FileManager;
+import com.koreait.fashionmall.exception.ProductRegistException;
+import com.koreait.fashionmall.model.common.FileManager;
 import com.koreait.fashionmall.model.domain.Product;
+import com.koreait.fashionmall.model.domain.Psize;
 import com.koreait.fashionmall.model.domain.SubCategory;
 import com.koreait.fashionmall.model.product.service.ProductService;
 import com.koreait.fashionmall.model.product.service.SubCategoryService;
 import com.koreait.fashionmall.model.product.service.TopCategoryService;
+import com.sun.org.apache.xpath.internal.operations.Mod;
 
 //관리자 모드에서의 상품에 대한 요청 처리
 @Controller
-public class ProductController {
+public class ProductController implements ServletContextAware{
 	private static final Logger logger=LoggerFactory.getLogger(ProductController.class);
 	
 	@Autowired
@@ -46,8 +54,21 @@ public class ProductController {
 	@Autowired
 	private FileManager fileManager;
 	
+	//우리가 왜 ServletContext를 써야하는가?   getRealPath() 사용하려고!!!
+	private ServletContext servletContext;
 	
-	//상위카테고리 가져오기 
+	@Override
+	public void setServletContext(ServletContext servletContext) {
+		this.servletContext = servletContext;
+		//이 타이밍을 놓치지말고, 실제 물리적 경로를 FileManager 에 대입해놓자!!!
+		fileManager.setSaveBasicDir(servletContext.getRealPath(fileManager.getSaveBasicDir()));
+		fileManager.setSaveAddonDir(servletContext.getRealPath(fileManager.getSaveAddonDir()));
+		
+		logger.debug(fileManager.getSaveBasicDir());
+		
+	}
+	
+	//상위카테고리 가져오기 (관리자용)
 	@RequestMapping(value="/admin/product/registform", method=RequestMethod.GET)
 	public ModelAndView getTopList() {
 		//3단계: 로직 객체에 일시킨다
@@ -107,6 +128,8 @@ public class ProductController {
 	@RequestMapping(value="/admin/product/list", method=RequestMethod.GET )
 	public ModelAndView getProductList() {
 		ModelAndView mav = new ModelAndView("admin/product/product_list");
+		List productList = productService.selectAll();
+		mav.addObject("productList", productList);
 		return mav;
 	}
 	
@@ -121,47 +144,80 @@ public class ProductController {
 	//상품 상세 
 	
 	//상품 등록 
-	@RequestMapping(value="/admin/product/regist", method=RequestMethod.POST)
-	public String registProduct(Product product) {
-		logger.debug("하위카테고리 "+product.getSubcategory_id());
+	@RequestMapping(value="/admin/product/regist", method=RequestMethod.POST, produces ="text/html;charset=utf8")
+	@ResponseBody
+	public String registProduct(Product product, String[] test) {
+		logger.debug("하위카테고리 "+product.getSubCategory().getSubcategory_id());
 		logger.debug("상품명 "+product.getProduct_name());
 		logger.debug("가격 "+product.getPrice());
 		logger.debug("브랜드 "+product.getBrand());
 		logger.debug("상세내용 "+product.getDetail());
-		logger.debug("업로드 이미지명 "+product.getRepImg().getOriginalFilename());
-		System.out.println("상품명 "+product.getProduct_name());
-		for(int i= 0;i<product.getFit().length;i++) {
-			String fit = product.getFit()[i];
-		logger.debug("지원 사이즈는 "+fit);
+		
+		for(Psize psize : product.getPsize()) {
+			logger.debug(psize.getFit());
 		}
 		
-		//대표이미지 업로드(현재 날짜)
-		long time = System.currentTimeMillis();
+		productService.regist(fileManager, product); //상품등록 서비스에게 요청
 		
-		//확장자 얻기
-		String ext =fileManager.getExtend(product.getRepImg().getOriginalFilename());
-		String filename=time+"."+ext;
-		try {
-			product.getRepImg().transferTo(new File(fileManager.getSavdDir()+"/"+filename));
-			logger.debug(filename);
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("\"result\":1,");
+		sb.append("\"msg\":\"상품등록 성공\"");
+		sb.append("}");
 		
-		
-		
-		//db에 넣기
-		productService.regist(product);
-		
-		return "redirect:/admin/product/list";
+		return sb.toString();
 	}
+
+
+	
 	
 	//상품 수정
 	
 	//상품 삭제
+
 	
+	//예외처리 
+	//위의 메서드 중에서 하나라도 예외가 발생하면, 아래의 핸들러가 동작
+	@ExceptionHandler(ProductRegistException.class)
+	@ResponseBody
+	public String handleException(ProductRegistException e) {
+		StringBuilder sb = new StringBuilder();
+		sb.append("{");
+		sb.append("\"result\":0");
+		sb.append("\"msg\":\""+e.getMessage()+"\"");
+		sb.append("}");
+		return sb.toString();
+	}
+	
+	
+	
+	/* *********************************************************************** 
+	  쇼핑몰 프론트 요청 처리 
+	 ************************************************************************/
+	//상품목록 요청 처리
+	@RequestMapping(value="/shop/product/list", method=RequestMethod.GET)
+	public ModelAndView getShopProductList(int subcategory_id) {//하위카테고리의 id
+		List topList = topCategoryService.selectAll();//상품카테고리 목록
+		List productList = productService.selectById(subcategory_id);//상품목록
+		
+		ModelAndView mav = new ModelAndView();
+		mav.addObject("topList", topList);
+		mav.addObject("productList", productList);
+		
+		mav.setViewName("shop/product/list");
+		return mav;
+	}
+		
+	//상품상세 보기 요청 
+	@RequestMapping(value="/shop/product/detail", method=RequestMethod.GET)
+	public ModelAndView getShopProductDetail(int product_id) {
+		List topList = topCategoryService.selectAll();//상품카테고리 목록
+		Product product = productService.select(product_id);//상품 1건 가져오기
+		
+		ModelAndView mav = new ModelAndView("shop/product/detail");
+		mav.addObject("topList", topList);
+		mav.addObject("product", product);
+		
+		return mav;
+	}
 }

@@ -7,10 +7,36 @@
 		<typeAlias type="com.koreait.fashionmall.model.domain.TopCategory" alias="TopCategory"/>
 		<typeAlias type="com.koreait.fashionmall.model.domain.SubCategory" alias="SubCategory"/>
 		<typeAlias type="com.koreait.fashionmall.model.domain.Product" 		alias="Product"/>
+		<typeAlias type="com.koreait.fashionmall.model.domain.Image" 		alias="Image"/>
+		<typeAlias type="com.koreait.fashionmall.model.domain.Psize" 		alias="Psize"/>
+		<typeAlias type="com.koreait.fashionmall.model.domain.Color" 		alias="Color"/>
+		<typeAlias type="com.koreait.fashionmall.model.domain.Member" 		alias="Member"/>
+		<typeAlias type="com.koreait.fashionmall.model.domain.Score" 			alias="Score"/>		
+		<typeAlias type="com.koreait.fashionmall.model.domain.Cart" 			alias="Cart"/>	
+		
+			
+		<typeAlias type="com.koreait.fashionmall.model.domain.OrderState" 			alias="OrderState"/>		
+		<typeAlias type="com.koreait.fashionmall.model.domain.Paymethod" 			alias="Paymethod"/>		
+		<typeAlias type="com.koreait.fashionmall.model.domain.OrderSummary" 			alias="OrderSummary"/>		
+		<typeAlias type="com.koreait.fashionmall.model.domain.OrderDetail" 			alias="OrderDetail"/>		
+		<typeAlias type="com.koreait.fashionmall.model.domain.Receiver" 			alias="Receiver"/>		
 	</typeAliases>
   <mappers>
     <mapper resource="com/koreait/fashionmall/mybatis/mapper/TopCategoryMapper.xml"/>
     <mapper resource="com/koreait/fashionmall/mybatis/mapper/SubCategoryMapper.xml"/>
     <mapper resource="com/koreait/fashionmall/mybatis/mapper/ProductMapper.xml"/>
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/ImageMapper.xml"/>
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/PsizeMapper.xml"/>
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/ColorMapper.xml"/>
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/MemberMapper.xml"/>
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/ScoreMapper.xml"/>
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/CartMapper.xml"/>
+    
+    
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/OrderStateMapper.xml"/>
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/PaymethodMapper.xml"/>
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/OrderSummaryMapper.xml"/>
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/OrderDetailMapper.xml"/>
+    <mapper resource="com/koreait/fashionmall/mybatis/mapper/ReceiverMapper.xml"/>
   </mappers>
 </configuration>

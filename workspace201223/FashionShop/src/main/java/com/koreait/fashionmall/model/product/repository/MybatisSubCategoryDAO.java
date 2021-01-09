@@ -6,6 +6,7 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.koreait.fashionmall.exception.ProductRegistException;
 import com.koreait.fashionmall.model.domain.SubCategory;
 import com.koreait.fashionmall.model.domain.TopCategory;
 
@@ -33,19 +34,19 @@ public class MybatisSubCategoryDAO implements SubCategoryDAO {
 	}
 
 	@Override
-	public void insert(SubCategory subCategory) {
+	public void insert(SubCategory subCategory) throws ProductRegistException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void update(SubCategory subCategory) {
+	public void update(SubCategory subCategory) throws ProductRegistException {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	public void delete(int topcategory_id) {
+	public void delete(int topcategory_id) throws ProductRegistException {
 		// TODO Auto-generated method stub
 
 	}

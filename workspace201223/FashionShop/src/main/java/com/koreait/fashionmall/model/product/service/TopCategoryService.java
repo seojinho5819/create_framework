@@ -1,6 +1,6 @@
 package com.koreait.fashionmall.model.product.service;
 
-import java.util.List;
+import java.util.List; 
 
 import org.springframework.stereotype.Service;
 

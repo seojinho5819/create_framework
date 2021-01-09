@@ -15,6 +15,7 @@ DefaultAnnotationHandlerMapping객체가 적용됨
  			<prop key="/hello">testController</prop>
  			<prop key="/board/list">listController</prop>
  			<prop key="/board/regist">registController</prop>
+ 			<prop key="/board/detail">detailController</prop>
  		</props>
  	</property>
  	
@@ -23,6 +24,7 @@ DefaultAnnotationHandlerMapping객체가 적용됨
  <bean id="testController" class="com.springmvc.test.controller.TestController"/>
  <bean id="listController" class="com.springmvc.board.controller.ListController"/>
  <bean id="registController" class="com.springmvc.board.controller.RegistController"/>
+ <bean id="detailController" class="com.springmvc.board.controller.DetailController"/>
  
  <!-- viewmapping -->
  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

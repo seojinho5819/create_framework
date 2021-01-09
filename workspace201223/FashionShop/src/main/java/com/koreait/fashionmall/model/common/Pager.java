@@ -1,7 +1,7 @@
 /*
  * paging ó���� ���뼺�� ���� Ŭ���� ����
  */
-package com.koreait.fashionmall.common;
+package com.koreait.fashionmall.model.common;
 
 import java.util.List;
 

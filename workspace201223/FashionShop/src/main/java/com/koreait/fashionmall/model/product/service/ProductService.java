@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
+import com.koreait.fashionmall.model.common.FileManager;
 import com.koreait.fashionmall.model.domain.Product;
 import com.koreait.fashionmall.model.domain.SubCategory;
 
@@ -11,9 +12,9 @@ import com.koreait.fashionmall.model.domain.SubCategory;
 public interface ProductService {
 	//CRUD
 		public List selectAll();
-		public List selectAllById(int subcategory_id);//선택한 상위카테고리에 소속된 하위카테고리 가져오기
+		public List selectById(int subcategory_id);//선택한 상위카테고리에 소속된 하위카테고리 가져오기
 		public Product select(int product_id);
-		public void regist(Product product);
+		public void regist(FileManager fileManager,Product product);
 		public void update(Product product);
 		public void delete(int product_id);
 

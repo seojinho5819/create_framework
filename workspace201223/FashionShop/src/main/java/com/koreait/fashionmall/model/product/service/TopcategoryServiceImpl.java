@@ -10,6 +10,7 @@ import com.koreait.fashionmall.model.product.repository.TopCategoryDAO;
 
 @Service
 public class TopcategoryServiceImpl implements TopCategoryService{
+	
 	@Autowired
 	private TopCategoryDAO topCategoryDAO;
 	
